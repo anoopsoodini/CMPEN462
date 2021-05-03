@@ -63,7 +63,7 @@ def encrypt(file, name, fileData):
 	# QPSK Modulation
     # indexing in python is non-inclusive
 	if (modulationChoice == 2):
-		for i in range(0, len(binaryString)):
+		for i in range(0, len(binaryString), 2):
 			if(binaryString[i:i+2] == '00'):
 				QPSK.append(complex((1/math.sqrt(2)), (1/math.sqrt(2))))
 			elif(binaryString[i:i+2] == '01'):
