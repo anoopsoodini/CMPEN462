@@ -2,11 +2,15 @@
 # James Zukowski, Chris Erhard, Anoop Soodini, Arib Hyder
 
 import os 
+import math
+import csv
 
-def encrypt(file):
+def encrypt(file, name):
 
 	string = ""
+	BPSK = []
 
+	# Iterate through text file and read in file contents into variable "string"
 	while True:
 
 		line = file.readline()
@@ -15,10 +19,41 @@ def encrypt(file):
 			break
 		else:
 			string += line
+	
+	# Convert input into its 8-bit ascii format, store in binaryString
+	binaryString = ''.join(bin(ord(c)) for c in string).replace('b', '')
 
-	double(string)
+	while True:
+		print("What modulation scheme would you like to use to encrypt your file?")
+		modulationChoice = int(input("Enter (1) for BPSK, (2) for QPSK, or (3) for 16QAM: "))
 
-	binaryString = bin(string)
+		if((modulationChoice != 1) and (modulationChoice != 2) and (modulationChoice != 3)):
+			print("Invalid Input")
+		
+		else:
+			break
+
+	# BPSK Modulation
+	counter = 0
+	if (modulationChoice == 1):
+		for i in binaryString:
+			if(i == '0'):
+				BPSK.append(complex((1/math.sqrt(2)), (1/math.sqrt(2))))
+			elif(i == '1'):
+				BPSK.append(complex((-1/math.sqrt(2)), (-1/math.sqrt(2))))
+		
+		base = os.path.splitext(name)[0]
+		f = open("BPSK"+base+".csv", "w+")
+
+		for i in BPSK:
+			f.write(str(complex(i))+",")
+
+		f.close()
+
+
+	
+
+
 
 
 
@@ -31,10 +66,15 @@ def decrypt(file):
 
 
 def main():
-	choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
 
-	if((choice != 1) and (choice != 2)):
-		raise Exception("Invalid Input, Enter 1 to Encrypt or 2 to Decrypt")
+	while True:
+		choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
+		
+		if ((choice != 1) and (choice != 2)):
+			print("Invalid Input")
+		
+		else:
+			break
 
 	fName = input("Please enter the name of the file you wish to encrypt or decrypt:\n")
 
@@ -45,7 +85,7 @@ def main():
 
 	finally:
 		if(choice == 1):
-			encrypt(fOpen)
+			encrypt(fOpen, fName)
 
 		if(choice == 2):
 			decrypt(fOpen)
