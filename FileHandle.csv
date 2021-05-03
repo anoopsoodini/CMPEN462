@@ -1,1 +1,2 @@
-t,e,s,t,.,t,x,t
+FileName,BPSK,QPSK,16QAM
+test.txt,NULL,NULL,16QAMtest.csv

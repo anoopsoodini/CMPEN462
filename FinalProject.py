@@ -5,10 +5,16 @@ import os
 import math
 import csv
 
-def encrypt(file, name):
+
+
+fields = ['FileName', 'BPSK', 'QPSK', '16QAM']
+
+def encrypt(file, name, fileData):
 
 	string = ""
 	BPSK = []
+	QPSK = []
+	QAM = []
 
 	# Iterate through text file and read in file contents into variable "string"
 	while True:
@@ -34,7 +40,7 @@ def encrypt(file, name):
 			break
 
 	# BPSK Modulation
-	counter = 0
+	
 	if (modulationChoice == 1):
 		for i in binaryString:
 			if(i == '0'):
@@ -50,13 +56,86 @@ def encrypt(file, name):
 
 		f.close()
 
+		fileData["BPSK"] = "BPSK"+base+".csv"
 
+
+
+	# QPSK Modulation
+    # indexing in python is non-inclusive
+	if (modulationChoice == 2):
+		for i in range(0, len(binaryString)):
+			if(binaryString[i:i+2] == '00'):
+				QPSK.append(complex((1/math.sqrt(2)), (1/math.sqrt(2))))
+			elif(binaryString[i:i+2] == '01'):
+				QPSK.append(complex((1/math.sqrt(2)), (-1/math.sqrt(2))))
+			elif(binaryString[i:i+2] == '10'):
+				QPSK.append(complex((-1/math.sqrt(2)), (1/math.sqrt(2))))
+			elif(binaryString[i:i+2] == '11'):
+				QPSK.append(complex((-1/math.sqrt(2)), (-1/math.sqrt(2))))
+
+
+		base = os.path.splitext(name)[0]
+
+		f = open("QPSK"+base+".csv", "w+")
+
+		for i in QPSK:
+			f.write(str(complex(i))+",")
+
+		f.close()
+
+		fileData["QPSK"] = "QPSK"+base+".csv"
+
+	if (modulationChoice == 3):
+		for i in range(0, len(binaryString), 4):
+			if (binaryString[i:i+4] == "0000"):
+				QAM.append(complex((1/math.sqrt(10)), (1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0001"):
+				QAM.append(complex((1/math.sqrt(10)), (3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0010"):
+				QAM.append(complex((3/math.sqrt(10)), (1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0011"):
+				QAM.append(complex((3/math.sqrt(10)), (3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0100"):
+				QAM.append(complex((1/math.sqrt(10)), (-1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0101"):
+				QAM.append(complex((1/math.sqrt(10)), (-3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0110"):
+				QAM.append(complex((3/math.sqrt(10)), (-1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "0111"):
+				QAM.append(complex((3/math.sqrt(10)), (-3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1000"):
+				QAM.append(complex((-1/math.sqrt(10)), (1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1001"):
+				QAM.append(complex((-1/math.sqrt(10)), (3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1010"):
+				QAM.append(complex((-3/math.sqrt(10)), (1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1011"):
+				QAM.append(complex((-3/math.sqrt(10)), (3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1100"):
+				QAM.append(complex((-1/math.sqrt(10)), (-1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1101"):
+				QAM.append(complex((-1/math.sqrt(10)), (-3/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1110"):
+				QAM.append(complex((-3/math.sqrt(10)), (-1/math.sqrt(10))))
+			if (binaryString[i:i+4] == "1111"):
+				QAM.append(complex((-3/math.sqrt(10)), (-3/math.sqrt(10))))
+
+		base = os.path.splitext(name)[0]
+		f = open("16QAM"+base+".csv", "w+")
+
+		for i in QAM:
+			f.write(str(complex(i))+",")
+
+		f.close()
+
+		fileData["16QAM"] = "16QAM"+base+".csv"
+
+
+	with open('FileHandle.csv', 'w+') as fh:
+		csvWrite = csv.DictWriter(fh, fieldnames = fields)
+		csvWrite.writeheader()
+		csvWrite.writerow(fileData)
 	
-
-
-
-
-
 
 
 def decrypt(file):
@@ -68,6 +147,8 @@ def decrypt(file):
 def main():
 
 	found = False
+
+	fileData = {'FileName': 'NULL', 'BPSK': 'NULL', 'QPSK': 'NULL', '16QAM': 'NULL'}
 
 	while True:
 		choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
@@ -85,24 +166,15 @@ def main():
 		print("Unable to locate file")
 
 	finally:
-		with open('FileHandle.csv', 'r') as f1:
-			csvRead = csv.reader(f1)
-			line = 0
-			for row in csvRead:
-				if(row[0]==fName):
-					print("File found in database")
-					found = True
-					break
-		
-		if not (found):
-			with open('FileHandle.csv', 'w') as f2:
-				csvWrite = csv.writer(f2)
+		fileData['FileName'] = fName
 
-				csvWrite.writerow(fName)
-					
+		with open('FileHandle.csv', 'w') as fh:
+			csvWrite = csv.DictWriter(fh, fieldnames = fields)
+			csvWrite.writeheader()
+			csvWrite.writerow(fileData)
 
 		if(choice == 1):
-			encrypt(fOpen, fName)
+			encrypt(fOpen, fName, fileData)
 
 		if(choice == 2):
 			decrypt(fOpen)
