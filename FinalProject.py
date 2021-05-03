@@ -67,6 +67,8 @@ def decrypt(file):
 
 def main():
 
+	found = False
+
 	while True:
 		choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
 		
@@ -76,14 +78,29 @@ def main():
 		else:
 			break
 
-	fName = input("Please enter the name of the file you wish to encrypt or decrypt:\n")
-
 	try:
+		fName = input("Please enter the name of the file you wish to encrypt or decrypt:\n")
 		fOpen = open(fName, 'r')
 	except:
 		print("Unable to locate file")
 
 	finally:
+		with open('FileHandle.csv', 'r') as f1:
+			csvRead = csv.reader(f1)
+			line = 0
+			for row in csvRead:
+				if(row[0]==fName):
+					print("File found in database")
+					found = True
+					break
+		
+		if not (found):
+			with open('FileHandle.csv', 'w') as f2:
+				csvWrite = csv.writer(f2)
+
+				csvWrite.writerow(fName)
+					
+
 		if(choice == 1):
 			encrypt(fOpen, fName)
 
