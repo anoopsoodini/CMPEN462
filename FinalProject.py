@@ -9,7 +9,6 @@ import binascii
 from cryptography.fernet import Fernet
 import base64
 
-
 def encrypt(file, name):
 	base = os.path.splitext(name)[0]
 	string = ""
@@ -334,8 +333,8 @@ def main():
 				decrypt(fName, symbols, modulation, key)
 
 			# see if user wants to continue and end if not
-			userChoice = int(input("Please enter (0) to encrypt/decrypt again. If not, type any other key.\n"))
-		if(userChoice != 0):
+			userChoice = str(input("Please enter (0) to encrypt/decrypt again. If not, type any other key.\n"))
+		if(userChoice != '0'):
 			runChoice = False
 			print("Encrypt/Decrypt Driver Exited Successfully.")
 
