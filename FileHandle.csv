@@ -1,2 +1,2 @@
-FileName,BPSK,QPSK,16QAM
-16QAMtest.csv,NULL,NULL,NULL
+FileName,BPSK,QPSK,16QAM
+BPSKtext.csv,BPSKtest.csv,NULL,NULL

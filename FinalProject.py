@@ -244,6 +244,8 @@ def decrypt(symbols, modulation):
 	outputTextFile = open("outputText.txt", "w")
 	outputTextFile.write(outputText)
 
+	print("Successfully Decrypted file! Results are stored in outputText.txt\n")
+
 
 def main():
 
@@ -251,53 +253,61 @@ def main():
 
 	fileData = {'FileName': 'NULL', 'BPSK': 'NULL', 'QPSK': 'NULL', '16QAM': 'NULL'}
 
-	while True:
-		choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
-		
-		if ((choice != 1) and (choice != 2)):
-			print("Invalid Input")
-		
-		else:
-			break
+	runChoice = True
+	
+	while runChoice:
 
-	try:
-		fName = input("Please enter the name of the file you wish to encrypt or decrypt:\n")
-		if(choice == 1):
-			fOpen = open(fName, 'r')
-		elif(choice ==  2):
-			with open(fName, newline='') as decryptFile:
-				reader = csv.reader(decryptFile)
-				symbols = []
-				for row in reader:
-					# store data (there are only 2 rows)
-					symbols.append((row))
-				
-				# get data into single array and moulation scheme into string variable
-				modulation = str(symbols[1])
-				symbols = symbols[0]
-				for i in range(len(symbols)):
-					# remove parenthesis
-					symbols[i] = symbols[i].strip("()")
-				# remove empty entries
-				symbols.remove("")
-				
-	except:
-		print("Unable to locate file")
+		while True:
+			choice = int(input("Would you like to Encrypt (1) or Decrypt (2) a file?:\n"))
+			
+			if ((choice != 1) and (choice != 2)):
+				print("Invalid Input")
+			
+			else:
+				break
 
-	finally:
-		fileData['FileName'] = fName
+		try:
+			fName = input("Please enter the name of the file you wish to encrypt or decrypt:\n")
+			if(choice == 1):
+				fOpen = open(fName, 'r')
+			elif(choice ==  2):
+				with open(fName, newline='') as decryptFile:
+					reader = csv.reader(decryptFile)
+					symbols = []
+					for row in reader:
+						# store data (there are only 2 rows)
+						symbols.append((row))
+					
+					# get data into single array and moulation scheme into string variable
+					modulation = str(symbols[1])
+					symbols = symbols[0]
+					for i in range(len(symbols)):
+						# remove parenthesis
+						symbols[i] = symbols[i].strip("()")
+					# remove empty entries
+					symbols.remove("")
+					
+		except:
+			print("Unable to locate file")
 
-		with open('FileHandle.csv', 'w') as fh:
-			csvWrite = csv.DictWriter(fh, fieldnames = fields)
-			csvWrite.writeheader()
-			csvWrite.writerow(fileData)
+		finally:
+			fileData['FileName'] = fName
 
-		if(choice == 1):
-			encrypt(fOpen, fName, fileData)
+			with open('FileHandle.csv', 'w') as fh:
+				csvWrite = csv.DictWriter(fh, fieldnames = fields)
+				csvWrite.writeheader()
+				csvWrite.writerow(fileData)
 
-		if(choice == 2):
-			decrypt(symbols, modulation)
+			if(choice == 1):
+				encrypt(fOpen, fName, fileData)
 
+			if(choice == 2):
+				decrypt(symbols, modulation)
+
+			userChoice = int(input("Please enter (0) to encrypt/decrypt again. If not, type any other key.\n"))
+		if(userChoice != 0):
+			runChoice = False
+			print("Encrypt/Decrypt Driver Exited Successfully.")
 
 
 if(__name__ == '__main__'):
