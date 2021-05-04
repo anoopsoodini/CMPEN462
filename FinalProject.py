@@ -27,7 +27,11 @@ def encrypt(file, name, fileData):
 			string += line
 	
 	# Convert input into its 8-bit ascii format, store in binaryString
-	binaryString = ''.join(bin(ord(c)) for c in string).replace('b', '')
+	binaryString = ''.join(format(ord(i), '08b') for i in string)
+	
+	# Used for testing. Just writing binary data after converion from ASCII to txt file to check correctness
+	encoded = open("encoded.txt", "w")
+	encoded.write(binaryString)
 
 	#
 	#
@@ -223,6 +227,11 @@ def decrypt(symbols, modulation):
 				out = out + '1111'
 
 
+	# Used for testing. Just writing binary data after demodulation to txt file to check correctness
+	outputBinary = open("outputBinary.txt", "w")
+	outputBinary.write(out)
+
+
 	# At this point, the variable "out" contains a string of the demodulated binary bits.
 	# I am having trouble getting from bits to ASCII characters. But I have verified that the
 	# demodulated output string is the same as the string before modulation so it's working
@@ -231,47 +240,15 @@ def decrypt(symbols, modulation):
 
 	#
 	#
-	# TO DO: Decrypt the binary data before modulating
+	# TO DO: Decrypt the binary data after demodulating
 	#
 	#
 
-
-
-
-	# binary_int = int(out, 2)
-	# byte_number = binary_int.bit_length() + 7 // 8
-
-	# binary_array = binary_int.to_bytes(byte_number, "big")
-	# ascii_text = binary_array.decode()
-
-	str_data =' '
-   
-	# slicing the input and converting it 
-	# in decimal and then converting it in string
-	for i in range(0, len(out), 7):
-		
-		# slicing the bin_data from index range [0, 6]
-		# and storing it as integer in temp_data
-		temp_data = int(out[i:i + 7])
-		
-		# passing temp_data in BinarytoDecimal() function
-		# to get decimal value of corresponding temp_data
-		decimal_data = BinaryToDecimal(temp_data)
-		
-		# Deccoding the decimal value returned by 
-		# BinarytoDecimal() function, using chr() 
-		# function which return the string corresponding 
-		# character for given ASCII value, and store it 
-		# in str_data
-		str_data = str_data + chr(decimal_data) 
-	
-	# printing the result
-	# print("The Binary value after string conversion is:", 
-		# str_data)
-	print(out)
-	# print(ascii_text)
-
-
+	#
+	#
+	# TO DO: Convert decrypted binary data to ASCII characters
+	#
+	#
 
 
 
@@ -300,7 +277,7 @@ def main():
 				reader = csv.reader(decryptFile)
 				symbols = []
 				for row in reader:
-					# store data (there is only 1 row)
+					# store data (there are only 2 rows)
 					symbols.append((row))
 				
 				# get data into single array and moulation scheme into string variable
