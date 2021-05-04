@@ -94,37 +94,37 @@ def encrypt(file, name, fileData):
 	# 16 QAM
 	if (modulationChoice == 3):
 		for i in range(0, len(binaryString), 4):
-			if (binaryString[i:i+4] == "0000"):
+			if (binaryString[i:i+4] == '0000'):
 				QAM.append(complex((1/math.sqrt(10)), (1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0001"):
+			if (binaryString[i:i+4] == '0001'):
 				QAM.append(complex((1/math.sqrt(10)), (3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0010"):
+			if (binaryString[i:i+4] == '0010'):
 				QAM.append(complex((3/math.sqrt(10)), (1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0011"):
+			if (binaryString[i:i+4] == '0011'):
 				QAM.append(complex((3/math.sqrt(10)), (3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0100"):
+			if (binaryString[i:i+4] == '0100'):
 				QAM.append(complex((1/math.sqrt(10)), (-1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0101"):
+			if (binaryString[i:i+4] == '0101'):
 				QAM.append(complex((1/math.sqrt(10)), (-3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0110"):
+			if (binaryString[i:i+4] == '0110'):
 				QAM.append(complex((3/math.sqrt(10)), (-1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "0111"):
+			if (binaryString[i:i+4] == '0111'):
 				QAM.append(complex((3/math.sqrt(10)), (-3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1000"):
+			if (binaryString[i:i+4] == '1000'):
 				QAM.append(complex((-1/math.sqrt(10)), (1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1001"):
+			if (binaryString[i:i+4] == '1001'):
 				QAM.append(complex((-1/math.sqrt(10)), (3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1010"):
+			if (binaryString[i:i+4] == '1010'):
 				QAM.append(complex((-3/math.sqrt(10)), (1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1011"):
+			if (binaryString[i:i+4] == '1011'):
 				QAM.append(complex((-3/math.sqrt(10)), (3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1100"):
+			if (binaryString[i:i+4] == '1100'):
 				QAM.append(complex((-1/math.sqrt(10)), (-1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1101"):
+			if (binaryString[i:i+4] == '1101'):
 				QAM.append(complex((-1/math.sqrt(10)), (-3/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1110"):
+			if (binaryString[i:i+4] == '1110'):
 				QAM.append(complex((-3/math.sqrt(10)), (-1/math.sqrt(10))))
-			if (binaryString[i:i+4] == "1111"):
+			if (binaryString[i:i+4] == '1111'):
 				QAM.append(complex((-3/math.sqrt(10)), (-3/math.sqrt(10))))
 
 		base = os.path.splitext(name)[0]
