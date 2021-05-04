@@ -9,9 +9,8 @@ import binascii
 from cryptography.fernet import Fernet
 import base64
 
-fields = ['FileName', 'BPSK', 'QPSK', '16QAM']
 
-def encrypt(file, name, fileData):
+def encrypt(file, name):
 	base = os.path.splitext(name)[0]
 	string = ""
 	BPSK = []
@@ -86,7 +85,6 @@ def encrypt(file, name, fileData):
 		f.write('\n' + "BPSK" + '\n' + key.decode('utf-8'))
 		f.close()
 
-		fileData["BPSK"] = base+"_BPSK.csv"
 		print("Successfully Encrypted file! Encrypted binary data is stored in " + base +"_encryptedBinary_in.txt.")
 		print("OFDM Symbols, modulation type, and encryption key are stored in " + base + "_BPSK.csv\n")
 
@@ -112,7 +110,6 @@ def encrypt(file, name, fileData):
 		f.write('\n' + "QPSK" + '\n' + key.decode('utf-8'))
 		f.close()
 
-		fileData["QPSK"] = base+"_QPSK.csv"
 		print("Successfully Encrypted file! Encrypted binary data is stored in " + base +"_encryptedBinary_in.txt.")
 		print("OFDM Symbols, modulation type, and encryption key are stored in " + base + "_QPSK.csv\n")
 
@@ -161,16 +158,8 @@ def encrypt(file, name, fileData):
 		f.write('\n' + "QAM" + '\n' + key.decode('utf-8'))
 		f.close()
 
-		fileData["16QAM"] = base+"_16QAM.csv"
 		print("Successfully Encrypted file! Encrypted binary data is stored in " + base +"_encryptedBinary_in.txt.")
 		print("OFDM Symbols, modulation type, and encryption key are stored in " + base + "_16QAM.csv\n")
-
-
-	with open('FileHandle.csv', 'w+') as fh:
-		csvWrite = csv.DictWriter(fh, fieldnames = fields)
-		csvWrite.writeheader()
-		csvWrite.writerow(fileData)
-
 
 	
 
@@ -292,11 +281,8 @@ def decrypt(name, symbols, modulation, key):
 
 
 def main():
-
+	print("Welcome to our Encryption/Decryption Application!\n")
 	found = False
-
-	fileData = {'FileName': 'NULL', 'BPSK': 'NULL', 'QPSK': 'NULL', '16QAM': 'NULL'}
-
 	runChoice = True
 	
 	while runChoice:
@@ -340,16 +326,9 @@ def main():
 			print("Unable to locate file")
 
 		finally:
-			fileData['FileName'] = fName
-
-			# store file data
-			with open('FileHandle.csv', 'w') as fh:
-				csvWrite = csv.DictWriter(fh, fieldnames = fields)
-				csvWrite.writeheader()
-				csvWrite.writerow(fileData)
 			# encrypt
 			if(choice == 1):
-				encrypt(fOpen, fName, fileData)
+				encrypt(fOpen, fName)
 			# decrypt
 			if(choice == 2):
 				decrypt(fName, symbols, modulation, key)
