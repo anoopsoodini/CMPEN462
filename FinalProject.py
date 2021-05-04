@@ -250,7 +250,23 @@ def decrypt(symbols, modulation):
 	#
 	#
 
-
+	# separates the binary by every 8 bits for conversion to ASCII
+	byte_array = []
+	for i in range(0, len(out), 8):
+		byte_array.append(out[i : i+8])
+		
+	outputText = ''
+	# converts every byte to ASCII
+	for b in byte_array:
+		try:
+			n = int(b, 2)
+			outputText = outputText + str(n.to_bytes((n.bit_length() + 7) // 8, 'big').decode())
+		except:
+			continue
+	
+	# writes converted ASCII characters to output.txt file
+	outputTextFile = open("outputText.txt", "w")
+	outputTextFile.write(outputText)
 
 
 def main():
