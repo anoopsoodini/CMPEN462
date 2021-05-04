@@ -231,24 +231,12 @@ def decrypt(symbols, modulation):
 	outputBinary = open("outputBinary.txt", "w")
 	outputBinary.write(out)
 
-
-	# At this point, the variable "out" contains a string of the demodulated binary bits.
-	# I am having trouble getting from bits to ASCII characters. But I have verified that the
-	# demodulated output string is the same as the string before modulation so it's working
-	# right. 
-
-
 	#
 	#
 	# TO DO: Decrypt the binary data after demodulating
 	#
 	#
 
-	#
-	#
-	# TO DO: Convert decrypted binary data to ASCII characters
-	#
-	#
 
 	# separates the binary by every 8 bits for conversion to ASCII
 	byte_array = []
